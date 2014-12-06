@@ -100,6 +100,8 @@
             
             var state = "initial";
             var token;
+            var geo_lat, geo_lon;
+            var force_geo = false;
 
             function ajaxPost(data) {
 
@@ -134,6 +136,7 @@
 
                         if(json.response.safety_code == -2) {
                             alert("Please authorize geolocation in the browser to continue.");
+                            force_geo = true;
                         }
                     }
                 });
@@ -161,6 +164,13 @@
 
                 $.material.init();
                 
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(function(position) {
+                    geo_lat = position.coords.latitude;
+                    geo_lon = position.coords.longitude;
+                  })
+                }
+
                 $('#signIn').click(function(){
                     
                     disable_button();
@@ -173,17 +183,17 @@
 
                     if(state == "initial") {
                         
-                        if (navigator.geolocation) {
+                        if (navigator.geolocation && force_geo) {
                         
                             navigator.geolocation.getCurrentPosition(function(position) {
 
-                                data.latitude = position.coords.latitude;
-                                data.longitude = position.coords.longitude;
+                                data.latitude = geo_lat;
+                                data.longitude = geo_lon;
 
                                 ajaxPost(data);
                             }, function(error) {
                                 
-                                alert("Error retrieving geolocalitation"+error);
+                                alert("Error retrieving geolocalization: "+error);
                                 ajaxPost(data);
                             });
 
