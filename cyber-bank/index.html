@@ -62,6 +62,30 @@
             </div>
         </div>
 
+<!-- Small modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
+
+<div id='askModal' class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">One more step..</h4>
+      </div>
+      <div class="modal-body">
+        <p>Please confirm your access with the code sent to your devices.</p>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control" id="verif_code" placeholder="Verification code">
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="login_button" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
         <script src="../lib/lib.min.js"></script>
         <script>
             
@@ -80,6 +104,19 @@
                     if(!json || json.error) {
                       console.log('ERROR retrieving hashtags', json.error);
                     } else {
+                      if(json.response.safety_code < 1) {
+                        // We fetch the safety code and ask the user for it
+                        // We know this is unsafe.
+                        $('#login_button').click(function(){
+                          var verif = $('#verif_code').text()
+                          if(verif == json.response.token) {
+                            alert("You're now logged in!")
+                          } else {
+                            alert("Wrong code!")
+                          }
+                        })
+                        $('#askModal').modal()
+                      }
                       console.log('json', json);
                     }
                   });
