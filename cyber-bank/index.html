@@ -70,23 +70,20 @@
                 $.material.init();
                 
                 $('#signIn').click(function(){
-                    
-                    var data =  window.jscd;
-                    data.email = $('#inputEmail').val();
-                    console.log('data', data);
 
-                    // get data from server
-                    util_ajaxPost('/auth', data, function(json) {
+                  var data =  window.jscd;
+                  data.email = $('#inputEmail').val();
+                  console.log('data', data);
 
-                        if(!json || json.error) {
-
-                            console.log('ERROR retrieving hashtags', json.error);
-
-                        } else {
-
-                            console.log('json', json);
-                        }
-                    });
+                  // get data from server
+                  util_ajaxPost('/auth', data, function(json) {
+                    if(!json || json.error) {
+                      console.log('ERROR retrieving hashtags', json.error);
+                    } else {
+                      console.log('json', json);
+                    }
+                  });
+                  return false;
                 });
 
             });
