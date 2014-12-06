@@ -106,7 +106,7 @@
                         // We fetch the safety code and ask the user for it
                         // We know this is unsafe.
                         $('#login_button').click(function(){
-                          var verif = $('#verif_code').text()
+                          var verif = $('#verif_code').val()
                           if(verif == json.response.token) {
                             alert("You're now logged in!")
                           } else {
