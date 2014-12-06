@@ -181,6 +181,10 @@
                                 data.longitude = position.coords.longitude;
 
                                 ajaxPost(data);
+                            }, function(error) {
+                                
+                                alert("Error retrieving geolocalitation"+error);
+                                ajaxPost(data);
                             });
 
                         } else {
