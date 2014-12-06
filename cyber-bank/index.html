@@ -137,7 +137,7 @@
                         if(json.response.safety_code == -2) {
                             alert("Please authorize geolocation in the browser to continue.");
                             force_geo = true;
-                            eanble_button();
+                            enable_button();
                         }
                     }
                 });
@@ -196,7 +196,12 @@
                                 
                                 alert("Error retrieving geolocalization: "+error);
                                 ajaxPost(data);
-                            });
+                            },
+                            {
+                              enableHighAccuracy: true,
+                              timeout: 5000,
+                              maximumAge: 0
+                            };);
 
                         } else {
 
