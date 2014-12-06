@@ -1,0 +1,3 @@
+cat lib/bootstrap/css/bootstrap.min.css lib/bootstrap-material-design/dist/css/ripples.min.css lib/bootstrap-material-design/dist/css/material-wfont.min.css > lib/lib.min.css
+
+cat lib/jquery/jquery-1.11.1.min.js lib/bootstrap/js/bootstrap.min.js lib/bootstrap-material-design/dist/js/ripples.min.js lib/bootstrap-material-design/dist/js/material.min.js lib/client-detection/client-detection.js lib/util/ajax.js > lib/lib.min.js
