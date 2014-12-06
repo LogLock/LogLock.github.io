@@ -98,30 +98,67 @@
         <script src="../lib/lib.min.js"></script>
         <script>
             
+            function ajaxPost(data) {
+
+                // get data from server
+                util_ajaxPost('/auth', data, function(json) {
+
+                    console.log('json', json);
+
+                    if(!json || json.error) {
+
+                        alert('Connection failure. Please try again');
+
+                    } else {
+
+                        if(json.response.safety_code == 0) {
+                            token = json.response.token;
+                            $('.validation-code').show();
+                            state = 'verify';
+                            enable_button();
+                            // We fetch the safety code and ask the user for it
+                            // We know this is unsafe, this should be done by the client backend
+                            //$('#askModal').modal()
+                        }
+
+                        if(json.response.safety_code == 1) {
+                            logged_in();
+                        }
+
+                        if(json.response.safety_code == -1) {
+                            alert("Access denied. Please contact the administrator.");
+                        }
+
+                        if(json.response.safety_code == -2) {
+                            alert("Please authorize geolocation in the browser to continue.");
+                        }
+                    }
+                });
+            }
+            
+            function disable_button() {
+
+                $('#signIn').prop("disabled", true);
+                $('#signIn').text("Loading..");
+            }
+
+            function enable_button() {
+
+                $('#signIn').prop("disabled", false);
+                $('#signIn').text("Sign in");
+            }
+
+            function logged_in() {
+
+                alert("You are now logged in!");
+                document.location.reload();
+            }
+            
             $(document).ready(function() {
-
-                function disable_button() {
-                    
-                    $('#signIn').prop("disabled", true);
-                    $('#signIn').text("Loading..");
-                }
-
-                function enable_button() {
-                    
-                    $('#signIn').prop("disabled", false);
-                    $('#signIn').text("Sign in");
-                }
-
-                function logged_in() {
-                    
-                    alert("You are now logged in!");
-                    document.location.reload();
-                }
-
-                var state = "initial";
 
                 $.material.init();
 
+                var state = "initial";
                 var token;
                 
                 $('#signIn').click(function(){
@@ -135,41 +172,22 @@
                     console.log('data', data);
 
                     if(state == "initial") {
+                        
+                        if (navigator.geolocation) {
+                        
+                            navigator.geolocation.getCurrentPosition(function(position) {
 
-                        // get data from server
-                        util_ajaxPost('/auth', data, function(json) {
+                                data.latitude = position.coords.latitude;
+                                data.longitude = position.coords.longitude;
 
-                            console.log('json', json);
+                                ajaxPost(data);
+                            });
 
-                            if(!json || json.error) {
+                        } else {
 
-                                alert('Connection failure. Please try again');
+                            ajaxPost(data);
+                        }
 
-                            } else {
-
-                                if(json.response.safety_code == 0) {
-                                    token = json.response.token;
-                                    $('.validation-code').show();
-                                    state = 'verify';
-                                    enable_button();
-                                    // We fetch the safety code and ask the user for it
-                                    // We know this is unsafe, this should be done by the client backend
-                                    //$('#askModal').modal()
-                                }
-
-                                if(json.response.safety_code == 1) {
-                                    logged_in();
-                                }
-
-                                if(json.response.safety_code == -1) {
-                                    alert("Access denied. Please contact the administrator.");
-                                }
-
-                                if(json.response.safety_code == -2) {
-                                    alert("Please authorize geolocation in the browser to continue.");
-                                }
-                            }
-                        });
                     }
 
                     if(state == "verify") {
