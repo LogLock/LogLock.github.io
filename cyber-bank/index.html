@@ -31,6 +31,9 @@
             .loggin_wrapper {
                 margin-top: 20px;
             }
+            .validation-code {
+              display: none;
+            }
         </style>
     </head>
     <body>
@@ -49,6 +52,14 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <input type="password" class="form-control" id="inputPassword" placeholder="Enter your password">
+                                </div>
+                            </div>
+                            <div class="form-group validation-code">
+                              <span>
+                              <span>
+                                <div class="col-xs-12">
+                                  Please input the validation code we've sent to your device.
+                                    <input type="number" class="form-control" id="validationCode" placeholder="Enter your validation code">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -88,36 +99,69 @@
         <script>
             
             $(document).ready(function() {
-                
+
+              function disable_button() {
+               $('#signIn').prop("disabled", true);
+               $('#signIn').text("Loading..");
+              }
+              function enable_button() {
+               $('#signIn').prop("disabled", false);
+               $('#signIn').text("Sign in");
+              }
+              function logged_in() {
+                alert("You are now logged in!");
+                document.location.reload()
+              }
+
+                var state = "initial"
                 $.material.init();
                 
+                  var token;
                 $('#signIn').click(function(){
-
+                  disable_button();
                   var data =  window.jscd;
                   data.email = $('#inputEmail').val();
-                  console.log('data', data);
+                  data.code = $('#validationCode').val();
 
+                  console.log('data', data);
+                if(state == "initial") {
                   // get data from server
                   util_ajaxPost('/auth', data, function(json) {
                     if(!json || json.error) {
-                      console.log('ERROR retrieving hashtags', json.error);
+                      console.log('Connection failure. Please try again');
                     } else {
-                      if(json.response.safety_code < 1) {
+                      if(json.response.safety_code == 0) {
+                        token = json.response.token;
+                        $('.validation-code').show();
+                        state = 'verify';
+                        enable_button();
                         // We fetch the safety code and ask the user for it
-                        // We know this is unsafe.
-                        $('#login_button').click(function(){
-                          var verif = $('#verif_code').val()
-                          if(verif == json.response.token) {
-                            alert("You're now logged in!")
-                          } else {
-                            alert("Wrong code!")
-                          }
-                        })
-                        $('#askModal').modal()
+                        // We know this is unsafe, this should be done by the client backend
+                        //$('#askModal').modal()
+                      }
+
+                      if(json.response.safety_code == 1) {
+                        logged_in();
+                      }
+
+                      if(json.response.safety_code == -1) {
+                        alert("Access denied. Please contact the administrator.");
+                      }
+                      if(json.response.safety_code == -2) {
+                        alert("Please authorize geolocation in the browser to continue.");
                       }
                       console.log('json', json);
                     }
                   });
+                }
+                if(state == "verify") {
+                  var verif = data.code
+                    if(verif == token) {
+                      logged_in();
+                    } else {
+                      alert("Wrong code!")
+                    }
+                }
                   return false;
                 });
 
