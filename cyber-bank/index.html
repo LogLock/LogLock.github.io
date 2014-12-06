@@ -99,6 +99,7 @@
         <script>
             
             var state = "initial";
+            var token;
 
             function ajaxPost(data) {
 
@@ -159,8 +160,6 @@
             $(document).ready(function() {
 
                 $.material.init();
-
-                var token;
                 
                 $('#signIn').click(function(){
                     
