@@ -73,96 +73,120 @@
             </div>
         </div>
 
+        <div id='askModal' class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
 
-<div id='askModal' class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">One more step..</h4>
+              </div>
+              <div class="modal-body">
+                <p>Please confirm your access with the code sent to your devices.</p>
+              <div class="input-group input-group-lg">
+                <input type="text" class="form-control" id="verif_code" placeholder="Verification code">
+              </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="login_button" class="btn btn-primary">Login</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">One more step..</h4>
-      </div>
-      <div class="modal-body">
-        <p>Please confirm your access with the code sent to your devices.</p>
-      <div class="input-group input-group-lg">
-        <input type="text" class="form-control" id="verif_code" placeholder="Verification code">
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="login_button" class="btn btn-primary">Login</button>
-      </div>
-    </div>
-  </div>
-</div>
         <script src="../lib/lib.min.js"></script>
         <script>
             
             $(document).ready(function() {
 
-              function disable_button() {
-               $('#signIn').prop("disabled", true);
-               $('#signIn').text("Loading..");
-              }
-              function enable_button() {
-               $('#signIn').prop("disabled", false);
-               $('#signIn').text("Sign in");
-              }
-              function logged_in() {
-                alert("You are now logged in!");
-                document.location.reload()
-              }
+                function disable_button() {
+                    
+                    $('#signIn').prop("disabled", true);
+                    $('#signIn').text("Loading..");
+                }
 
-                var state = "initial"
+                function enable_button() {
+                    
+                    $('#signIn').prop("disabled", false);
+                    $('#signIn').text("Sign in");
+                }
+
+                function logged_in() {
+                    
+                    alert("You are now logged in!");
+                    document.location.reload();
+                }
+
+                var state = "initial";
+
                 $.material.init();
+
+                var token;
                 
-                  var token;
                 $('#signIn').click(function(){
-                  disable_button();
-                  var data =  window.jscd;
-                  data.email = $('#inputEmail').val();
-                  data.code = $('#validationCode').val();
+                    
+                    disable_button();
+                    
+                    var data =  window.jscd;
+                    data.email = $('#inputEmail').val();
+                    data.code = $('#validationCode').val();
 
-                  console.log('data', data);
-                if(state == "initial") {
-                  // get data from server
-                  util_ajaxPost('/auth', data, function(json) {
-                    if(!json || json.error) {
-                      console.log('Connection failure. Please try again');
-                    } else {
-                      if(json.response.safety_code == 0) {
-                        token = json.response.token;
-                        $('.validation-code').show();
-                        state = 'verify';
-                        enable_button();
-                        // We fetch the safety code and ask the user for it
-                        // We know this is unsafe, this should be done by the client backend
-                        //$('#askModal').modal()
-                      }
+                    console.log('data', data);
 
-                      if(json.response.safety_code == 1) {
-                        logged_in();
-                      }
+                    if(state == "initial") {
 
-                      if(json.response.safety_code == -1) {
-                        alert("Access denied. Please contact the administrator.");
-                      }
-                      if(json.response.safety_code == -2) {
-                        alert("Please authorize geolocation in the browser to continue.");
-                      }
-                      console.log('json', json);
+                        // get data from server
+                        util_ajaxPost('/auth', data, function(json) {
+
+                            console.log('json', json);
+
+                            if(!json || json.error) {
+
+                                alert('Connection failure. Please try again');
+
+                            } else {
+
+                                if(json.response.safety_code == 0) {
+                                    token = json.response.token;
+                                    $('.validation-code').show();
+                                    state = 'verify';
+                                    enable_button();
+                                    // We fetch the safety code and ask the user for it
+                                    // We know this is unsafe, this should be done by the client backend
+                                    //$('#askModal').modal()
+                                }
+
+                                if(json.response.safety_code == 1) {
+                                    logged_in();
+                                }
+
+                                if(json.response.safety_code == -1) {
+                                    alert("Access denied. Please contact the administrator.");
+                                }
+
+                                if(json.response.safety_code == -2) {
+                                    alert("Please authorize geolocation in the browser to continue.");
+                                }
+                            }
+                        });
                     }
-                  });
-                }
-                if(state == "verify") {
-                  var verif = data.code
-                    if(verif == token) {
-                      logged_in();
-                    } else {
-                      alert("Wrong code!")
+
+                    if(state == "verify") {
+
+                        var verif = data.code;
+
+                        if(verif == token) {
+                            
+                            logged_in();
+                            
+                        } else {
+                            
+                            alert("Wrong code!")
+                        }
                     }
-                }
-                  return false;
+
+                    return false;
                 });
 
             });
