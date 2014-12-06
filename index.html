@@ -10,9 +10,10 @@
         <link href="lib/bootstrap-material-design/dist/css/material-wfont.min.css" rel="stylesheet">
         <style>
             body {
-                background-image: url(img/orange-sunset-small-rain-clouds-panoramic-2013-05-10_1200.jpg);
-                background-color: #f3f4f5;
-                background-repeat: no-repeat;
+                background-image: url(img/orange-sunset-small-rain-clouds-panoramic-2013-05-10_506.jpg);
+                background-color: #f3f4f5;            
+                background-position: center center;
+                background-attachment: fixed;
                 background-size: cover;
             }
             .mainLogin {               
@@ -32,6 +33,11 @@
                 background-color: white;
                 border-color: #acbfc9;
                 border-width: 10px;
+            }
+            @media (orientation: landscape) {
+                body {
+                    background-image: url(img/orange-sunset-small-rain-clouds-panoramic-2013-05-10_1200.jpg);
+                }
             }
         </style>
     </head>
