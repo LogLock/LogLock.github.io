@@ -185,16 +185,13 @@
                     if(state == "initial") {
                         
                         if (navigator.geolocation && force_geo) {
-                        
+                          $('#signIn').text("Locating you..");
                             navigator.geolocation.getCurrentPosition(function(position) {
-
                                 data.latitude = geo_lat;
                                 data.longitude = geo_lon;
-
                                 ajaxPost(data);
                             }, function(error) {
-                                
-                                alert("Error retrieving geolocalization: "+error);
+                                alert("Error retrieving geolocation: "+error);
                                 ajaxPost(data);
                             },
                             {
