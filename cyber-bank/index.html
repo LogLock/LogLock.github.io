@@ -134,6 +134,7 @@
 
                         if(json.response.safety_code == -1) {
                             alert("Access denied. Please contact the administrator.");
+                            enable_button();
                         }
 
                         if(json.response.safety_code == -2) {
@@ -197,6 +198,7 @@
                             }, function(error) {
                                 alert("Error retrieving geolocation: "+error);
                                 ajaxPost(data);
+                                enable_button();
                             },
                             {
                               enableHighAccuracy: true,
@@ -218,12 +220,10 @@
                         var verif = data.code;
 
                         if(verif == token) {
-                            
                             logged_in();
-                            
                         } else {
-                            
                             alert("Wrong code!")
+                            enable_button()
                         }
                     }
 
