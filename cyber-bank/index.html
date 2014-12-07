@@ -187,8 +187,10 @@
                         if (navigator.geolocation && force_geo) {
                           $('#signIn').text("Locating you..");
                             navigator.geolocation.getCurrentPosition(function(position) {
-                                data.latitude = geo_lat;
-                                data.longitude = geo_lon;
+                                geo_lat = position.coords.latitude;
+                                geo_lon = position.coords.longitude;
+                                data.latitude = window.geo_lat;
+                                data.longitude = window.geo_lon;
                                 ajaxPost(data);
                             }, function(error) {
                                 alert("Error retrieving geolocation: "+error);
@@ -202,6 +204,8 @@
 
                         } else {
 
+                            data.latitude = window.geo_lat;
+                            data.longitude = window.geo_lon;
                             ajaxPost(data);
                         }
 
