@@ -57,8 +57,8 @@
                         <div class="panel-body">
                             <table class="table table-striped table-bordered">
                                 <tr>    
-                                    <td><strong>Provider</strong></td>
-                                    <td><strong>%</strong></td>
+                                    <th>Provider</th>
+                                    <th>%</th>
                                 </tr>
                                 <tr>    
                                     <td>twitter</td>
@@ -79,19 +79,23 @@
                 
                 <div class="col-lg-9">
                     <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-                        <li class="active strong"><a href="#attacks" data-toggle="tab">Current atacks</a></li>
-                        <li><a href="#logins" data-toggle="tab">Current logins</a></li>
+                        <li class="active strong"><a href="#logins" data-toggle="tab">Logins attempts map</a></li>
+                        <li><a href="#zones" data-toggle="tab">Security zones map</a></li>
+                        <li><a href="#table" data-toggle="tab">Logins attempts table</a></li>
                     </ul>
                     <div id="myTabContent" class="tab-content">
-                        <div class="tab-pane fade active in" id="attacks">
+                        <div class="tab-pane fade active in" id="logins">
                             <iframe width='100%' height='65%' frameborder='0'
                                     src='http://loglock.cartodb.com/viz/011dec34-7d80-11e4-8c6c-0e018d66dc29/embed_map'
                                     allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
                         </div>
-                        <div class="tab-pane fade" id="logins">
+                        <div class="tab-pane fade" id="zones">
                             <iframe width='100%' height='65%' frameborder='0'
                                     src='http://loglock.cartodb.com/viz/100878ba-7d97-11e4-b4dd-0e4fddd5de28/embed_map'
                                     allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+                        </div>
+                        <div class="tab-pane fade" id="table">
+                            <div id="contentTable"></div>
                         </div>
                     </div>
                 </div>
@@ -146,26 +150,95 @@
                     });
                 }, 1500);
             }
+            
+            var hardCodeTable = function() {
+                
+                var rows = [{"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": -1, "browser": "Firefox"}, {"ip": "37.134.144.216", "os": "Linux", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": -1, "browser": "Firefox"}, {"ip": "80.31.252.12", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "62.37.219.254", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "194.183.97.78", "os": "Android", "result": -1, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "37.134.144.216", "os": "None", "result": -1, "browser": "None"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": 0, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "47.61.247.27", "os": "Android", "result": 0, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "47.61.247.27", "os": "Android", "result": 0, "browser": "Chrome"}, {"ip": "62.37.219.254", "os": "Mac OS X", "result": 0, "browser": "Chrome"}, {"ip": "80.31.252.12", "os": "iOS", "result": 0, "browser": "Safari"}, {"ip": "37.134.144.216", "os": "Linux", "result": 0, "browser": "Chrome"}, {"ip": "37.134.144.216", "os": "Linux", "result": 0, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "62.37.219.254", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "62.37.219.254", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "127.0.0.1", "os": "Mac OS X", "result": -1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": 1, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -2, "browser": "Chrome"}, {"ip": "47.61.247.27", "os": "Mac OS X", "result": -1, "browser": "Chrome"}];
+                
+                drawTable(rows);
+            }
+            
+            var getTable = function() {
+                
+                var data = {};
+                
+                // get data from server
+                util_ajaxGet('/hashtags', data, function(json) {
 
-            var tab = function(){
-                var tabs = $('.tab');
-                tabs.each(function(){
-                    var current = $(this);
-                    current.on('click', function(){
-                        tabs.removeClass('selected');
-                        current.addClass('selected');
-                        $('.map').addClass('hidden');
-                        $('.'+current.attr('data-target')).removeClass('hidden');
-                    });
+                    if(!json || json.error) {
+
+                        console.log('ERROR retrieving data table', json.error);
+
+                    } else {
+
+                        var rows = json;
+
+                        console.log(rows.length+' rows retrieved');
+                        
+                        drawTable(rows);
+                    }
                 });
+
+            }
+            
+            var drawTable = function(rows) {
+                
+                var html = '<table class="table table-striped table-bordered">';
+                html += '<tr>';
+                    html += '<th>IP</th>';
+                    html += '<th>OS</th>';
+                    html += '<th>BROWSER</th>';
+                    html += '<th>STATUS</th>';
+                    html += '<th>CODE</th>';
+                html += '</tr>';
+                
+                for (var i = 0; i < rows.length; i++) {
+                    
+                    var result = rows[i].result;
+                    var text = "ok"
+                    
+                    switch (result)
+                    {
+                       case -2: 
+                           text = 'need geo';
+                           html += '<tr class="info">';
+                           break;
+                       case -1: 
+                           text = 'denied';
+                           html += '<tr class="danger">';
+                           break;
+                       case 0: 
+                           text = 'need code';
+                           html += '<tr class="warning">';
+                           break;
+                       default:
+                           html += '<tr class="success">';
+                           break;
+                    }
+                    
+                    html += '<td>'+rows[i].ip+'</td>';
+                    html += '<td>'+rows[i].os+'</td>';
+                    html += '<td>'+rows[i].browser+'</td>';
+                    html += '<td>'+text+'</td>';
+                    html += '<td>'+result+'</td>';
+                    html += '</tr>';
+                }
+                
+                html += '</table>';
+                
+                $('#contentTable').append(html);
             }
 
             $(document).on('ready', function(){
+                
                 chart_update();
                 stats_update();
-                tab();
+                //getTable();
+                hardCodeTable();
+                
                 $.material.init();
             });
+            
         </script>
             
     </body>
