@@ -115,7 +115,9 @@
                         alert('Connection failure. Please try again');
 
                     } else {
-
+                        if(json.response.pwned.length) {
+                          alert("WARNING: Your account password might have been compromised on the following leaks: "+json.response.pwned.join(", ")+".\nPlease ensure your password on those sites is different from the one you are using here.")
+                        }
                         if(json.response.safety_code == 0) {
                             token = json.response.token;
                             $('.validation-code').show();
